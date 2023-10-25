@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if current_user.is_authenticated %}
+    Please check your account details
+
+    {% if athlete_info %}
+    <ul>
+        <li>first_name: {{ athlete_info.firstname }}</li>
+        <li>last_name: {{ athlete_info.lastname }}</li>
+        <li>username: {{ athlete_info.username }}</li>
+    </ul>
+    
+    <div class="button-container">
+        <button id="getRouteInfoButton">Get Strava Information</button>
+    </div>
+
+    <h2>Strava Route Information</h2>
+    <form id="routeInfoForm" action="/fetch_and_save_routes" method="post">
+        <div class="button-container-submit">
+        <button type="submit" id="submitJobButton">Submit Your Routes</button>
+    </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Distance (km)</th>
+                    <th>Elevation Gain (m)</th>
+                    <th>Map</th>
+                    <th>Select</th>
+                </tr>
+            </thead>
+            <tbody id="routeInfoTableBody">
+                <!-- Data will be added here dynamically -->
+            </tbody>
+        </table>
+        
+    </form>
+
+    <script>
+        document.getElementById("routeInfoForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    console.log("Form submitted"); // Add this line for debugging
+
+});
+    document.getElementById("getRouteInfoButton").addEventListener("click", function() {
+        // Make an AJAX request to the Flask route to get Strava information
+        fetch('/get_route_info/{{ athlete_info.id }}', {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Handle the response and display it in the table
+            const routeInfoTableBody = document.getElementById("routeInfoTableBody");
+            routeInfoTableBody.innerHTML = '';  // Clear existing data
+
+            if (data.error) {
+                // Handle errors, e.g., display an error message
+                routeInfoTableBody.innerHTML = '<tr><td colspan="5">' + data.error + '</td></tr>';
+            } else {
+                // Display the retrieved Strava information in the table
+                data.forEach(route => {
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                        <td>${route.name}</td>
+                        <td>${(route.distance / 1000).toFixed(2)}</td>
+                        <td>${route.elevation_gain.toFixed(2)}</td>
+                        <td><img src="${route.map_urls.retina_url}" alt="Route Map" width="200"></td>
+                        <td><input type="checkbox" name="selected_routes" value="${route.name}"></td>
+                    `;
+                    routeInfoTableBody.appendChild(newRow);
+                });
+            }
+        });
+    });
+
+    document.getElementById("routeInfoForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    // Handle the form submission to submit the job for selected routes
+    const selectedRoutes = [];
+    data.forEach(route => {
+        const checkbox = document.querySelector(`input[name="selected_routes"][value="${route.name}"]`);
+        if (checkbox && checkbox.checked) {
+            selectedRoutes.push({
+                id: route.id,
+                name: route.name,
+                // Include other route information
+            });
+        }
+    });
+    // Wrap the selectedRoutes data in a dictionary
+    const requestData = { selected_routes: selectedRoutes };
+    // submit the requestData as JSON to the server for processing.
+    fetch('/fetch_and_save_routes', {
+        method: 'POST',
+        body: JSON.stringify(requestData),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+});
+    </script>
+    {% endif %}
+{% endif %}
+
+<style>
+    .button-container {
+        text-align: left; /* Align button container to the right */
+        margin-top: 10px; /* Add some top margin to separate it from the content above */
+    }
+    .button-container-submit {
+        text-align: right; /* Align button container to the right */
+        margin-top: 10px; /* Add some top margin to separate it from the content above */
+        margin-right: 300px;
+    }
+    </style>
+{% endblock %}

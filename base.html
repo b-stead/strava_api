@@ -1,0 +1,15 @@
+{% extends 'bootstrap/base.html' %} {% block title %} {% if title %}{{ title }} - Microblog{% else %}{{ _('Welcome to Microblog') }}{% endif %} {% endblock %} {% block navbar %}
+Toggle navigation  Microblog
+{{ _('Home') }}
+{{ _('Explore') }}
+{% if current_user.is_anonymous %}
+{{ _('Login') }}
+{% else %}
+{{ _('Profile') }}
+{{ _('Logout') }}
+{% endif %}
+{% endblock %} {% block content %}
+{% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
+{{ message }}
+{% endfor %} {% endif %} {% endwith %} {# application content needs to be provided in the app_content block #} {% block app_content %}{% endblock %}
+{% endblock %} {% block scripts %} {{ super() }} {{ moment.include_moment() }} {{ moment.lang(g.locale) }} {% endblock %}

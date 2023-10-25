@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- if user is a member then show -->
+{% if current_user.is_anonymous %}
+      <a href="{{ url_for('auth.login') }}">Login</a>
+      {% else %}
+    <h1> {{ club.name }} </h1>
+        <a href="{{ url_for('strava.oauth2_authorize') }}">Connect Strava</a>
+
+    Here we will add stats/ routes etc
+    {% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if current_user.is_authenticated %}
+        <h2>Hi, {{ current_user.username }}!</h2>
+        <p>
+            <a class="btn btn-primary" href="{{ url_for('strava.logout') }}">Find routes</a>
+          </p>
+          <p>
+            <a class="btn btn-primary" href="{{ url_for('strava.success') }}">get my routes</a>
+          </p>
+        <p>
+          <a class="btn btn-primary" href="{{ url_for('strava.logout') }}">Logout</a>
+        </p>
+      {% else %}
+        <p>
+          <a class="btn btn-primary" href="{{ url_for('strava.oauth2_authorize')}}">Login with Strava</a>
+
+        </p>
+      {% endif %}
+{% endblock %}
+

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1> Find a club </h1>
+
+    <h2> Register a club </h2>
+    <a href="{{ url_for('clubs.create_club') }}">Register a club</a>
+
+    <ul>
+        {% for club in clubs %}
+            <li>
+                <a href="{{ url_for('clubs.club_index', club_id=club.id) }}"> {{ club.name }} </a>
+
+
+                {% if current_user not in club.members %}
+                    <form method="POST" action="{{ url_for('clubs.join_club', club_id=club.id) }}">
+                        <button type="submit">Join</button>
+                    </form>
+                {% else %}
+                    <span>You are already a member</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

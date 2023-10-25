@@ -1,0 +1,13 @@
+TOKEN={'token_type': 'Bearer', 'expires_at': 1696160143,'expires_in': 21600, 
+        'refresh_token': 'd08532fa36a5695921a06b70e9d4d3851f761f1a', 
+        'access_token': '718d55aa69b3a2edc6abf27c6029be2c912927ed', 
+        'athlete': {'id': 2433729, 'username': 'brendon_stead', 'resource_state': 2, 
+            'firstname': 'Brendon', 'lastname': 'Stead', 'bio': None, 'city': 'Twickenham', 
+            'state': 'England', 'country': 'United Kingdom', 'sex': 'M', 'premium': False, 
+            'summit': False, 'created_at': '2013-06-27T12:10:17Z', 
+            'updated_at': '2023-09-23T17:26:56Z', 'badge_type_id': 0, 
+            'weight': 86.0, 
+            'profile_medium': 'https://dgalywyr863hv.cloudfront.net/pictures/athletes/2433729/14079618/1/medium.jpg', 
+            'profile': 'https://dgalywyr863hv.cloudfront.net/pictures/athletes/2433729/14079618/1/large.jpg', 
+            'friend': None, 'follower': None}
+            }
